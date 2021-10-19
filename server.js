@@ -1,11 +1,21 @@
+//this is the main entry point when npm start
+
+/import is called require in JS
 const express = require('express');
 const app = express();
 const db = require('./config/keys');
 const mongoose = require('mongoose');
+const users = require('./routes/api/users');
+const profile = require('./routes/api/profile');
+const posts = require('./routes/api/posts');
 
-//first route
+//routes
 app.get('/',(req,res)=> res.send('Hello LinkDev'));
 
+app.use('/api/users', users)
+// ^^ use means use other javascript files
+app.use('/api/profile', profile)
+app.use('/api/posts', posts)
 
 //Connect to MangoDB
 console.log(db.mongoURI);
