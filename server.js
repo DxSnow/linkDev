@@ -9,6 +9,12 @@ const users = require('./routes/api/users');
 const profile = require('./routes/api/profile');
 const posts = require('./routes/api/posts');
 
+//process user's input during routing:
+// 1.  encode(transform Emojis and characters in any languages to unicode)
+app.use(express.urlencoded());
+// 2. turn user's input to json format
+app.use(express.json());
+
 //routes
 app.get('/',(req,res)=> res.send('Hello LinkDev'));
 
@@ -18,11 +24,10 @@ app.use('/api/profile', profile);
 app.use('/api/posts', posts);
 
 //Connect to MangoDB
-console.log(db);
 mongoose.connect(db)
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.log(err));
 
 const port = 5000;
 app.listen(port,()=>console.log(`Server is running on port ${port}`));
-//^listen is an Express method. Starts a UNIX socket and listens for connections on the given path. format: app.listen(path, [callback]) 
+//^listen is an Express method. Starts a UNIX socket and listens for connections on the given path. format: app.listen(path, [callback])
