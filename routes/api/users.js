@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-
-const user = require('../../models/User');
+const bcrypt = require('bcryptjs');
+const User = require('../../models/User');
 
 
 // setup subroutes
@@ -16,12 +16,32 @@ router.post('/register', (req,res) => {
         //if there is a user found with that email
         return res.status(400).json({email:'Email already exists!'})
 
-      }else{//create a new user's record
+      } else {
+        const newUser = new User({
+          name: req.body.name,
+          email: req.body.email,
+          password: req.body.password
+        }) // end of newUser registration
 
-      }
-    })
-    .catch(err =>console.log(err))
-});
+        //hash password
+        bcrypt.genSalt(10, (err, salt) => {
+          if (err) throw err;
+          bcrypt.hash(req.body.password, salt, (err, hash) => {
+            if (err) throw err;
+            newUser.password = hash;
+            newUser.save()
+              .then(user => res.json(user))
+              .catch(err => console.log(err));
+          }
+          );// end of bcrypt.hash
+        }//end of genSalt call back
+        );
+      } // end of else
+    })  //end of findOne.then
+    .catch(err => console.log(err)) //end of findOne.catch
+} // end of (req,res)
+)// end of router.post
 
 
 module.exports = router;
+
