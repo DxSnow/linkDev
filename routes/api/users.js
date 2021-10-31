@@ -3,7 +3,8 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const User = require('../../models/User');
 const gravatar = require('gravatar');
-
+const jwt = require('jsonwebtoken');
+const Keys = require('../../config/keys');
 
 // setup subroutes
 // @route      (GET or POST) /api/users/register   (How to ARRIVE here, INDLUDING THE WHOLE PATH)
@@ -19,7 +20,7 @@ router.post('/register', (req,res) => {
 
       } else {
 
-        // link gravatar
+
 
         const newUser = new User({
           name: req.body.name,
@@ -64,7 +65,12 @@ router.post('/login', (req, res) => {
           if (isMatch == false){
             return res.status(400).json({password: 'Password incorrect'});
           } else {
-            return res.json({msg:'password matches'});
+            // generate token
+            const payload ={
+              id:user.id
+
+            }
+            jwt.sign(payload,Keys.secretOrKey,{expiresIn:3600}, (err,token)=>res.json({token:'Bearer' + token}))
           }
         }
       )
