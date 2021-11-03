@@ -5,9 +5,10 @@ const User = require('../../models/User');
 const gravatar = require('gravatar');
 const jwt = require('jsonwebtoken');
 const Keys = require('../../config/keys');
+const passport = require('passport');
 
 // setup subroutes
-// @route      (GET or POST) /api/users/register   (How to ARRIVE here, INDLUDING THE WHOLE PATH)
+// @route      POST /api/users/register   (How to ARRIVE here, INDLUDING THE WHOLE PATH)
 // @desc       Register a user    (description. What does this block of code do?)
 // @access     public  (Tell viewer who can access this route)
 router.post('/register', (req,res) => {
@@ -78,6 +79,13 @@ router.post('/login', (req, res) => {
 
 })
 
-          //Generate token
+// @route      GET  /api/users/register
+// @desc       return current user info
+// @access     Private
+
+router.get('/current', passport.authenticate('jwt',{session:false}), (req,res) => {
+  res.json(req.user);
+
+})
 
 module.exports = router;
