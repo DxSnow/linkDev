@@ -4,6 +4,7 @@ const keys = require('./keys');
 const User = require('../models/User');
 
 
+
 const opts ={};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = keys.secretOrKey;
