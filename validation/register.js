@@ -4,12 +4,12 @@ const isEmpty = require('./is-empty');
 module.exports = function validateRegisterInput(data) {
   let errors = {};
 
-  if (!Validator.isLength(data.name, {min: 2, max:30})){
-    errors.name = 'Name must be between 2 and 30 characters';
-  }
 
-  if (isEmpty(data.name)){
-    errors.name = 'Name field is required';
+
+  if (data.name.length === 0 ){
+        errors.name = 'Name field is required';
+  }else if (data.name.length < 2 || data.name.length > 30){
+        errors.name = 'Name must be between 2 and 30 characters';
   }
 
   if (isEmpty(data.email)){
@@ -38,6 +38,6 @@ module.exports = function validateRegisterInput(data) {
 
   return {
     errors,
-    isValid: isEmpty(errors)
+    isValid: isEmpty(errors) // true or false, It's better to create this bolean in this file, so everytime you need to check if something is valid when you call this function, you can use .isValid instead of check the status of errors outside.)
   }
 }
