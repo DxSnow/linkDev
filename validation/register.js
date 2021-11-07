@@ -26,11 +26,11 @@ module.exports = function (data){
         errors.email = 'Password must be between 8 and 30 characters';
     }
 
-    //confirm password
-    if (isEmpty(data.password2)){
-        errors.password2 = 'Confirm Password field is required';
-      }else if(!Validator.equals(data.password, data.password2)){
-        errors.password2 = 'Passwords doesn\'t match';
+    //check confirmed password
+    if (isEmpty(data.passwordConfirm)){
+      errors.passwordConfirm = 'Confirm Password field is required';
+    }else if(!Validator.equals(data.password, data.passwordConfirm)){
+      errors.passwordConfirm = 'Passwords doesn\'t match';
     }
 
     return {errors,
