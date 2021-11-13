@@ -2,6 +2,11 @@ const express = require('express');
 const router = express.Router(); //create a new instance of express, but specifically, only router this time
 
 
+const Profile= require('../../models/Profile');
+const User = require('../../models/User');
+
+const passport = require('passport');
+
 
 
 // setup subroutes
