@@ -25,7 +25,7 @@ const UserSchema = new Schema({
 });
 
 
-module.exports = User = mongoose.model('users', UserSchema);
+module.exports = User = mongoose.model('User', UserSchema);
 // ^^ this means let mongoose take the UserSchema and create a real collection in MongoDB called 'users', then export it.
 //it is a combination of the following:
 //User = mongoose.model('users', UserSchema);
