@@ -7,103 +7,15 @@ const validateProfileInput = require("../../validation/profile");
 const validateExperienceInput = require("../../validation/experience");
 const validateEducationInput = require("../../validation/education");
 
-// setup subroutes
-router.get('/test', (req,res) => res.json({msg: 'profile works!'}));
-// ^ json here means send json. All communications with the API should be in Json)
-
-
-// @route   GET api/profile
-// @desc    Get current users profile(so when user logged in he/she can see his profile)
-// @access  Private
-router.get(
-  "/",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    const errors = {};
-
-    Profile.findOne({ user: req.user.id }) //req.user.id is from passport decoded payload
-      .populate("user", ["name", "avatar"])
-      .then((profile) => {
-        if (!profile) {
-          errors.noprofile = "There is no profile for this user";
-          return res.status(404).json(errors);
-        }
-        res.json(profile);
-      })
-      .catch((err) => res.status(404).json(err));
-  }
-);
-
-// @route   GET api/profile/all
-// @desc    Get all profiles
-// @access  Public
-router.get("/all", (req, res) => {
-  const errors = {};
-
-  Profile.find()
-    .populate("user", ["name", "avatar"])
-    .then((profiles) => {
-      if (!profiles) {
-        errors.noprofile = "There are no profiles";
-        return res.status(404).json(errors);
-      }
-
-      res.json(profiles);
-    })
-    .catch((err) => res.status(404).json(err));
-});
-
-// @route   GET api/profile/user/:user_id
-// @desc    Get profile by user ID
-// @access  Public
-
-router.get("/user/:user_id", (req, res) => {
-  const errors = {};
-
-  Profile.findOne({ user: req.params.user_id })
-    .populate("user", ["name", "avatar"])
-    .then((profile) => {
-      if (!profile) {
-        errors.noprofile = "There is no profile for this user";
-        return res.status(404).json(errors);
-      }
-
-      res.json(profile);
-    })
-    .catch((err) =>
-      res.status(404).json({ profile: "There is no profile for this user" })
-    );
-});
-
-// @route   GET api/profile/handle/:handle
-// @desc    Get profile (only basic and social part, not including education and experience) by handle
-// @access  Public
-
-router.get("/handle/:handle", (req, res) => {
-  const errors = {};
-
-  Profile.findOne({ handle: req.params.handle })
-    .populate("user", ["name", "avatar"])
-    .then((profile) => {
-      if (!profile) {
-        errors.noprofile = "There is no profile for this user";
-        return res.status(404).json(errors);
-      }
-
-      res.json(profile);
-    })
-    .catch((err) => res.status(404).json(err));
-});
-
 // @route   POST api/profile
-// @desc    Create or edit user profile
+// @desc    Create or edit user profile (not including education and experience)
 // @access  Private
-router.post(
+router.post( //why not use a seperate put or patch to update profile?
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     const { errors, isValid } = validateProfileInput(req.body);
-  
+
     // Check Validation
     if (!isValid) {
       // Return any errors with 400 status
@@ -161,6 +73,92 @@ router.post(
     });
   }
 );
+
+//!!!!!!!!! not working!
+// @route   GET api/profile
+// @desc    Get current users profile(so when user logged in he/she can see his profile)
+// @access  Private
+router.get(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const errors = {};
+
+    Profile.findOne({ user: req.user.id }) //req.user.id is from passport decoded payload
+      .populate("user", ["name", "avatar"])
+      .then((profile) => {
+        if (!profile) {
+          errors.noprofile = "There is no profile for this user";
+          return res.status(404).json(errors);
+        }
+        res.json(profile);
+      })
+      .catch((err) => res.status(404).json(err));
+  }
+);
+
+//!!!!!!!!! not working!
+// @route   GET api/profile/all
+// @desc    Get all profiles
+// @access  Public
+router.get("/all", (req, res) => {
+  const errors = {};
+
+  Profile.find()
+    .populate("user", ["name", "avatar"])
+    .then((profiles) => {
+      if (!profiles) {
+        errors.noprofile = "There are no profiles";
+        return res.status(404).json(errors);
+      }
+
+      res.json(profiles);
+    })
+    .catch((err) => res.status(404).json(err));
+});
+//!!!!!!!!! not working!
+// @route   GET api/profile/user/:user_id
+// @desc    Get profile by user ID
+// @access  Public
+
+router.get("/user/:user_id", (req, res) => {
+  const errors = {};
+
+  Profile.findOne({ user: req.params.user_id })  //req.params means the parameters(start with colon) in the url
+    .populate("user", ["name", "avatar"])
+    .then((profile) => {
+      if (!profile) {
+        errors.noprofile = "There is no profile for this user";
+        return res.status(404).json(errors);
+      }
+
+      res.json(profile);
+    })
+    .catch((err) =>
+      res.status(404).json({ profile: "There is no profile for this user" })
+    );
+});
+//!! not working
+// @route   GET api/profile/handle/:handle
+// @desc    Get profile (only basic and social part, not including education and experience) by handle
+// @access  Public
+
+router.get("/handle/:handle", (req, res) => {
+  const errors = {};
+
+  Profile.findOne({ handle: req.params.handle })
+    .populate("user", ["name", "avatar"])
+    .then((profile) => {
+      if (!profile) {
+        errors.noprofile = "There is no profile for this user";
+        return res.status(404).json(errors);
+      }
+
+      res.json(profile);
+    })
+    .catch((err) => res.status(404).json(err));
+});
+
 
 // @route   POST api/profile/experience
 // @desc    Add experience to profile
