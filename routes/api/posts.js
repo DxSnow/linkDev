@@ -12,6 +12,32 @@ const Profile = require('../../models/Profile');
 // Validation
 const validatePostInput = require('../../validation/post');
 
+// @route   POST api/posts
+// @desc    Create post
+// @access  Private
+router.post(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const { errors, isValid } = validatePostInput(req.body);
+
+    // Check Validation
+    if (!isValid) {
+      // If any errors, send 400 with errors object
+      return res.status(400).json(errors);
+    }
+
+    const newPost = new Post({
+      text: req.body.text,
+      // name: req.body.name,
+      // avatar: req.body.avatar,
+      user: req.user.id
+    });
+
+    newPost.save().then(post => res.json(post));
+  }
+);
+
 // @route   GET api/posts
 // @desc    Get posts
 // @access  Public
@@ -33,31 +59,7 @@ router.get('/:id', (req, res) => {
     );
 });
 
-// @route   POST api/posts
-// @desc    Create post
-// @access  Private
-router.post(
-  '/',
-  passport.authenticate('jwt', { session: false }),
-  (req, res) => {
-    const { errors, isValid } = validatePostInput(req.body);
 
-    // Check Validation
-    if (!isValid) {
-      // If any errors, send 400 with errors object
-      return res.status(400).json(errors);
-    }
-
-    const newPost = new Post({
-      text: req.body.text,
-      name: req.body.name,
-      avatar: req.body.avatar,
-      user: req.user.id
-    });
-
-    newPost.save().then(post => res.json(post));
-  }
-);
 
 // @route   DELETE api/posts/:id
 // @desc    Delete post
@@ -168,8 +170,8 @@ router.post(
       .then(post => {
         const newComment = {
           text: req.body.text,
-          name: req.body.name,
-          avatar: req.body.avatar,
+          // name: req.body.name,
+          // avatar: req.body.avatar,
           user: req.user.id
         };
 
@@ -183,7 +185,7 @@ router.post(
   }
 );
 
-// @route   DELETE api/posts/comment/:id/:comment_id
+// @route   DELETE api/posts/comment/:post_id/:comment_id
 // @desc    Remove comment from post
 // @access  Private
 router.delete(
