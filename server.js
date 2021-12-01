@@ -34,6 +34,6 @@ mongoose.connect(db)
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.log(err));
 
-const port = 7000;
+const port = 5555;
 app.listen(port,()=>console.log(`Server is running on port ${port}`));
 //^listen is an Express method. Starts a UNIX socket and listens for connections on the given path. format: app.listen(path, [callback])
