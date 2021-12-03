@@ -8,14 +8,29 @@ export default class Login extends Component {
     password:"",
     errors:{}
   }
-  inputChange=(event) => {this.setState({[event.target.name]:event.target.value})}
+  inputChange=(event) => this.setState({[event.target.name]:event.target.value})
 
-  submitForm=(event) => {}
+
+
+  formSubmit = (event)=>{
+    event.preventDefault(); //  大坑警告！ without this, console will show [HMR] Waiting for update signal from WDS...because default is going to other html
+    const user = {
+      email: this.state.email,
+      password: this.state.password
+    };
+
+    axios
+      .post('/api/users/login', user)
+      .then(res => console.log(res.data))
+      .catch(err => this.setState({errors: err.response.data}));
+  }
+
   render() {
+
     return (
-      <div class="login">
+      <div className="login">
         <h1 className="title">Log In</h1>
-        <form noValidate onSubmit={this.submitForm}>
+        <form noValidate onSubmit={this.formSubmit}>
           {/* add noValidate to turn off browser's validation for us. Since not all browsers do validation, we prefer to validate from the server*/}
 
           {/* email input */}
@@ -29,6 +44,7 @@ export default class Login extends Component {
 
           {/* submit button */}
           <button type="submit" className="submit">Submit</button>
+          <input type="submit" className="btn btn-info btn-block mt-4" />
 
         </form>
 
