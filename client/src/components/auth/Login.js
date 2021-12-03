@@ -1,6 +1,13 @@
+// this page is my experiments. what's different from the register page?
+// 1. it omitted constructor by using fields directly
+// 2. styled by vanilla CSS instead of Bootstrap
+// 3. use <button> instead of <input>
+// 4. do not have curly braces around error message div
+
+
 import React, { Component } from 'react'
 import axios from 'axios';
-
+import classnames from 'classnames';
 
 export default class Login extends Component {
   state={
@@ -26,7 +33,7 @@ export default class Login extends Component {
   }
 
   render() {
-
+    const errors = this.state.errors;
     return (
       <div className="login">
         <h1 className="title">Log In</h1>
@@ -35,16 +42,22 @@ export default class Login extends Component {
 
           {/* email input */}
           <input type="email" name = "email" placeholder = "Email address" value={this.state.email}
-          onChange={this.inputChange}/>
+          onChange={this.inputChange}
+          className={classnames({'my-invalid': errors.email})}/>
+
+          <div className="error">{errors.email}</div>
 
           {/* password input */}
           <input type="password" name = "password" placeholder = "Password"
           value={this.state.password}
-          onChange={this.inputChange}/>
+          onChange={this.inputChange}
+          className={classnames({'my-invalid': errors.password})}/>
+
+         <div className="error">{errors.password}</div>
 
           {/* submit button */}
           <button type="submit" className="submit">Submit</button>
-          <input type="submit" className="btn btn-info btn-block mt-4" />
+
 
         </form>
 
