@@ -1,13 +1,96 @@
-.App {
-  text-align: left;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
+/* sign up and login form */
+.title {
+  text-align: center;
+}
+form {
+  width: 80%;
+  margin: 1rem auto;
+}
+@media only screen and (min-width: 600px) {
+  form {
+    width: 60%;
+  }
+}
+@media only screen and (min-width: 1000px) {
+  form {
+    width: 30%;
+  }
+}
+/* input size */
+input {
+  width: 100%;
+  margin: 1rem auto;
+  border-radius: 10%;
+  color:black;
+  padding: 1rem, 1rem;
+  border: 1px solid #ccc;
+  padding: 1rem 1rem;
+}
+
+.submit {
+  width: 100%;
+  margin: 1rem auto;
+  border-radius: 10%;
+  color: gray;
+  background-color: greenyellow;
+  padding: 1rem, 1rem;
+  border: 1px solid #ccc;
+  padding: 1rem 1rem;
+}
+/* dynamic button style */
+.button {
+  display: inline-block;
+  border-radius: 4px;
+  background-color: #cc92f8;
+  border: none;
+  color: black;
+  text-align: center;
+  font-size: 28px;
+  padding: 20px;
+  width: 300px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.button span:after {
+  content: "\00bb";
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.button:hover span {
+  padding-right: 25px;
+}
+
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+/* kal's code */
+
 img {
   width: 100%;
 }
 
 .landing {
   position: relative;
-  background: url('./img/showcase.jpg') no-repeat;
+  background: url("./img/showcase.jpg") no-repeat;
   background-size: cover;
   background-position: center;
   height: 100vh;
