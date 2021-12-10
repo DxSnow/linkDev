@@ -4,7 +4,7 @@ const initialState= {
   isAuthenticated:false,
   user:{}
 }
-export default function(State = initialState,action){
+export default function(state = initialState,action){
   switch (action.type) {
     case SET_USER:
       // We need to return a new state object

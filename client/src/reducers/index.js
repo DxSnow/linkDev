@@ -1,7 +1,11 @@
-import {combineReducer} from 'redux'; // combine reducers into one object, a more elegant way to register reducer to Redux store
+// combine reducers into one object, a more elegant way to register reducer to Redux store
+
+
+import { combineReducers } from "redux";
 import authReducer from "./authReducer";
 
-export default combineReducer ({
-  auth : authReducer
-})
-//this will be refered as "rootReducer" in store.js
+const rootReducer = combineReducers({
+  auth: authReducer
+}) //combineReducers() returns an Object including all your reducer. just to simplify signing up reducers when create a store.
+
+export default rootReducer; //this will be used in store.js
