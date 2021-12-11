@@ -1,7 +1,10 @@
-//this page is written following tutorial from Kal Academy
+// Note: this page uses Bootstrap, Login page uses vanilla CSS. Just to practice both and compare them.
+
 import React, { Component } from 'react';
-import axios from 'axios';
 import classnames from 'classnames';
+import {connect} from 'react-redux';
+import {registerUserAction} from '../../actions/authActions';
+import PropTypes from 'prop-types';
 
 
 class Register extends Component {
@@ -30,19 +33,18 @@ class Register extends Component {
       password2: this.state.password2
     };
 
+    　this.props.registerUserAction(newUser);
+    // axios is moved to action creator in order to keep UI component light.
 
-    axios
-      .post('/api/users/register', newUser)
-      .then(res => console.log(res.data))
-      .catch(err => this.setState({errors: err.response.data}));
   }
 
   render() {
     const {errors} = this.state;
-
+    const {user} = this.props.auth;
 
     return (
       <div className="register">
+        {user? user.name : "no user"}
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
@@ -125,9 +127,15 @@ class Register extends Component {
       </div>
 
     )
+
   }
 }
+Register.propTypes = {
+  registerUserAction: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
+}
 
+const mapStateToProps = state => ({auth : state.auth})
 
-
-export default Register;
+// export wrapper component created by connect()(), which is a function that returns a class
+export default connect(mapStateToProps,{registerUserAction})(Register);
