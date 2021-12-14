@@ -20,7 +20,7 @@ class Register extends Component {
     }
   }
 
-  onChange(e){
+  onChange(e){ //e is for event. React pass in the event for us
     this.setState({[e.target.name]: e.target.value });
   }
 
@@ -32,9 +32,12 @@ class Register extends Component {
       password: this.state.password,
       password2: this.state.password2
     };
+    // when event is triggered, Register component uses the function given by its wrapper/parent component, the "newUser" argument is thus passes to its wrapper component.(Note that Register's wrapper is anonymous, created by connect() )
+    this.props.registerUserAction(newUser);
 
-    　this.props.registerUserAction(newUser);
     // axios is moved to action creator in order to keep UI component light.
+    axios.post('api/users/register', userData)
+    .then(res => history.push('/login'))
 
   }
 

@@ -6,10 +6,13 @@
 
 
 import React, { Component } from 'react'
-import axios from 'axios';
+import {connect} from 'react-redux';
+import {loginUserAction} from '../../actions/authActions';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import { withRouter} from 'react-router-dom';
 
-export default class Login extends Component {
+class Login extends Component {
   state={
     email:"",
     password:"",
@@ -26,10 +29,12 @@ export default class Login extends Component {
       password: this.state.password
     };
 
-    axios
-      .post('/api/users/login', user)
-      .then(res => console.log(res.data))
-      .catch(err => this.setState({errors: err.response.data}));
+    //use action creator to dispatch an action
+    this.props.loginUserAction(user);
+    // axios
+    //   .post('/api/users/login', user)
+    //   .then(res => console.log(res.data))
+    //   .catch(err => this.setState({errors: err.response.data}));
   }
 
   render() {
@@ -65,3 +70,6 @@ export default class Login extends Component {
     )
   }
 }
+const mapStateToProps = state => ({user:state.auth})
+const mapDispatchToProps = {loginUserAction} // same as {loginUserAction:loginUserAction}
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Login));

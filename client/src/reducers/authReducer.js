@@ -1,5 +1,6 @@
 import {SET_USER} from "../actions/types";
 
+
 const initialState= {
   isAuthenticated:false,
   user:{}
@@ -14,8 +15,9 @@ export default function(state = initialState,action){
         user:action.payload //update state
       }
 
+
     default:
-      return state
+      return state;
   }
 
 
