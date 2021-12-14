@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import {
   BrowserRouter,
-  Routes,
   Route
 } from "react-router-dom";
 import './App.css';
@@ -22,14 +21,9 @@ export default class App extends Component {
         <BrowserRouter>
           <div className="App">
             <Navbar/>
-
-            <Routes>
-                <Route exact path = "/" element = {<Landing />}/>
-                <Route exact path = "/register" element = {<Register />} />
-                <Route exact path = "/login" element = {<Login />} />
-
-            </Routes>
-
+                <Route exact path = "/" component = {Landing}/>
+                <Route exact path = "/register" component = {Register} />
+                <Route exact path = "/login" component = {Login} />
             <Footer/>
           </div>
         </BrowserRouter>
