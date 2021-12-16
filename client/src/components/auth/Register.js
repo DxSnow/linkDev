@@ -1,26 +1,22 @@
-// Note: this page uses Bootstrap, Login page uses vanilla CSS. Just to practice both and compare them.
-
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import {connect} from 'react-redux';
-import {registerUserAction} from '../../actions/authActions';
-import PropTypes from 'prop-types';
-
+import {registerUser} from '../../actions/authActions';
 
 class Register extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       name: '',
       email: '',
       password: '',
-      password2: '',
-      errors: {}
+      passwordConfirm: '',
     }
   }
 
-  onChange(e){ //e is for event. React pass in the event for us
+  onChange(e){
     this.setState({[e.target.name]: e.target.value });
   }
 
@@ -30,19 +26,13 @@ class Register extends Component {
       name: this.state.name,
       email: this.state.email,
       password: this.state.password,
-      password2: this.state.password2
+      passwordConfirm: this.state.passwordConfirm
     };
-    // when event is triggered, Register component uses the function given by its wrapper/parent component, the "newUser" argument is thus passes to its wrapper component.(Note that Register's wrapper is anonymous, created by connect() )
-    this.props.registerUserAction(newUser);
-
-    // axios is moved to action creator in order to keep UI component light.
-    axios.post('api/users/register', userData)
-    .then(res => history.push('/login'))
-
+    this.props.registerUser(newUser, this.props.history);
   }
 
   render() {
-    const {errors} = this.state;
+    const {errors} = this.props;
 
     return (
       <div className="register">
@@ -50,6 +40,7 @@ class Register extends Component {
           <div className="row">
             <div className="col-md-8 m-auto">
               <h1 className="display-4 text-center">Sign Up</h1>
+              <p className="lead text-center">Create your LinkDev account</p>
               <form noValidate onSubmit={this.onSubmit.bind(this)}>
                 <div className="form-group">
                   <input
@@ -107,20 +98,20 @@ class Register extends Component {
                   <input
                   type="password"
                   className={classnames('form-control form-control-lg', {
-                      'is-invalid': errors.password2
+                      'is-invalid': errors.passwordConfirm
                     })}
                   placeholder="Confirm Password"
-                  name="password2"
-                    value = {this.state.password2}
+                  name="passwordConfirm"
+                    value = {this.state.passwordConfirm}
                     onChange={this.onChange.bind(this)}
                    />
                     {
                       <div className="invalid-feedback">
-                        {errors.password2}
+                        {errors.passwordConfirm}
                       </div>
                     }
                 </div>
-                <input type="submit" className="submit" />
+                <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>
             </div>
           </div>
@@ -128,15 +119,16 @@ class Register extends Component {
       </div>
 
     )
-
   }
 }
 Register.propTypes = {
-  registerUserAction: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
+  registerUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
 }
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+  errors: state.errors
+})
 
-const mapStateToProps = state => ({auth : state.auth})
-
-// export wrapper component created by connect()(), which is a function that returns a class
-export default connect(mapStateToProps,{registerUserAction})(Register);
+export default connect(mapStateToProps, {registerUser}) (Register);

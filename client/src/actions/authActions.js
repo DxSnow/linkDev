@@ -1,15 +1,22 @@
 import axios from "axios";
-import { SET_USER } from "./types";
+import { SET_USER, GET_ERRORS, CLEAR_ERRORS } from "./types";
 import jwt_decode from 'jwt-decode';
 import setAuthToken from "../utils/setAuthToken.js";
 
-export const registerUserAction =(userData,history) => dispatch => {
+export const registerUser =(userData,history) => dispatch => {
   axios.post('api/users/register', userData)
-    .then(res => history.push('/login'))// go to next component without finishing Register's lifecycle
+    .then(res => {
+       history.push('/login')// go to next component without finishing Register's lifecycle
+       dispatch({type: CLEAR_ERRORS, payload:{}})//clear error status when submit
+      })
+    .catch(err => dispatch({
+      type: GET_ERRORS,
+      payload: err.response.data
+    }));
 
 }
 
-export const loginUserAction = (userData, history) => dispatch => { //If we want to dispatch many actions in a single method, we can do this
+export const loginUser = (userData, history) => dispatch => { //If we want to dispatch many actions in a single method, we can do this
 
   axios.post('/api/users/login', userData)
     .then(res => {
@@ -29,4 +36,16 @@ export const loginUserAction = (userData, history) => dispatch => { //If we want
       payload: err.response.data
     }));
 
+}
+//Logout user
+export const logoutUser = () => dispatch => {
+  //Remove token from localstorage
+  localStorage.removeItem('jwtToken');
+  //Remove the token from the auth header
+  setAuthToken(false);
+  //Clean the redux store
+  dispatch({
+    type: SET_USER,
+    payload: {}
+  });
 }

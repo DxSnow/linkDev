@@ -1,5 +1,5 @@
 import {SET_USER} from "../actions/types";
-
+import isEmpty from "../utils/isEmpty";
 
 const initialState= {
   isAuthenticated:false,
@@ -12,6 +12,7 @@ export default function(state = initialState,action){
       return{
         // that has all the existing state data
         ...state,
+        isAuthenticated: !isEmpty(action.payload),
         user:action.payload //update state
       }
 
