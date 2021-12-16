@@ -7,10 +7,10 @@
 
 import React, { Component } from 'react'
 import {connect} from 'react-redux';
-import {loginUserAction} from '../../actions/authActions';
+import {loginUser} from '../../actions/authActions';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { withRouter} from 'react-router-dom';
+
 
 class Login extends Component {
   state={
@@ -18,8 +18,13 @@ class Login extends Component {
     password:"",
     errors:{}
   }
-  inputChange=(event) => this.setState({[event.target.name]:event.target.value})
+  static propTypes = {
+    loginUser: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired
+  }
 
+  inputChange=(event) => this.setState({[event.target.name]:event.target.value})
 
 
   formSubmit = (event)=>{
@@ -30,7 +35,7 @@ class Login extends Component {
     };
 
     //use action creator to dispatch an action
-    this.props.loginUserAction(user);
+    this.props.loginUser(user,this.props.history);
     // axios
     //   .post('/api/users/login', user)
     //   .then(res => console.log(res.data))
@@ -38,7 +43,7 @@ class Login extends Component {
   }
 
   render() {
-    const errors = this.state.errors;
+    const errors = this.props.errors; //when using redux, it's no longer in this.status but in this.props
     return (
       <div className="login">
         <h1 className="title">Log In</h1>
@@ -70,6 +75,6 @@ class Login extends Component {
     )
   }
 }
-const mapStateToProps = state => ({user:state.auth})
-const mapDispatchToProps = {loginUserAction} // same as {loginUserAction:loginUserAction}
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Login));
+const mapStateToProps = state => ({auth:state.auth, errors:state.errors}) //this state is redux store's state
+const mapDispatchToProps = {loginUser} 
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
